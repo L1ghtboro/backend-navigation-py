@@ -126,6 +126,7 @@ def main():
     model = load_model()
     while True:
         if is_ue4_editor_active():
+            start_time = time.time()
             ue4_windows = gw.getWindowsWithTitle(windowToNavigate)
             if ue4_windows:
                 ue4_window = ue4_windows[0]
@@ -136,6 +137,9 @@ def main():
                                        position[1] * (desktop_resolution[1] / compressed_resolution[1]))
                     print(f"Pink Cube Position: {scaled_position}")
                     navigate_to_position(scaled_position, ue4_window)
+                    end_time = time.time()
+                    time_taken = end_time - start_time
+                    print(f"Time taken to find Pink Cube: {time_taken:.2f} seconds")
                 else:
                     # If the pink cube is not in the frame, turn the camera and move to find it
                     turn_camera('left', duration=0.1)  # Adjust the direction and duration as needed
