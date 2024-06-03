@@ -80,10 +80,11 @@ def move_to_find_cube(ue4_window, model, desktop_resolution, compressed_resoluti
                                position[1] * (desktop_resolution[1] / compressed_resolution[1]))
             print(f"Pink Cube Position: {scaled_position}")
             navigate_to_position(scaled_position, ue4_window)
-            break  # Stop searching once the cube is found
+            return True  # Stop searching once the cube is found
         else:
             # Turn the camera in the opposite direction if the cube is not found
             turn_camera('right', duration=0.1)  # Adjust the direction and duration as needed
+    return False  # Return False if the cube is not found
 
 def navigate_to_position(position, ue4_window):
     ue4_window_left, ue4_window_top, ue4_window_width, ue4_window_height = ue4_window.box
@@ -124,6 +125,9 @@ def main():
     compressed_resolution = [640, 360]
     desktop_resolution = get_desktop_resolution()
     model = load_model()
+    search_directions = ['forward', 'left', 'backward', 'right']
+    search_index = 0
+
     while True:
         if is_ue4_editor_active():
             start_time = time.time()
@@ -142,10 +146,11 @@ def main():
                     print(f"Time taken to find Pink Cube: {time_taken:.2f} seconds")
                 else:
                     # If the pink cube is not in the frame, turn the camera and move to find it
-                    turn_camera('left', duration=0.1)  # Adjust the direction and duration as needed
-                    move_to_find_cube(ue4_window, model, desktop_resolution, compressed_resolution)
-                    navigate_camera('forward', duration=0.1)
-       # time.sleep(0.1)
+                    if not move_to_find_cube(ue4_window, model, desktop_resolution, compressed_resolution):
+                        # Move the player if the cube is still not found
+                        navigate_camera(search_directions[search_index], duration=0.5)
+                        search_index = (search_index + 1) % len(search_directions)
+        time.sleep(0.1)
 
 if __name__ == "__main__":
     main()
