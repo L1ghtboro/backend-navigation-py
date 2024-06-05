@@ -55,8 +55,8 @@ def load_model():
 
 def find_navigation_cube_position(screenshot):
     hsv_image = cv2.cvtColor(screenshot, cv2.COLOR_BGR2HSV)
-    lower_bound = np.array([130, 0, 220])
-    upper_bound = np.array([170, 255, 255])
+    lower_bound = np.uint8([[[155, 0, 157]]])
+    upper_bound = np.uint8([[[255, 95, 229]]])
     mask = cv2.inRange(hsv_image, lower_bound, upper_bound)
     contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     if contours:
