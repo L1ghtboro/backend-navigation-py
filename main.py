@@ -9,7 +9,8 @@ from algorithm import (
     move_to_find_cube,
     navigate_to_position,
     navigate_camera,
-    load_model
+    load_model_d,
+    load_model_from_file
 )
 
 windowToNavigate = "DungeonProcedural (64-bit DebugGame PCD3D_SM6)"
@@ -17,7 +18,7 @@ windowToNavigate = "DungeonProcedural (64-bit DebugGame PCD3D_SM6)"
 def main():
     compressed_resolution = [640, 360]
     desktop_resolution = get_desktop_resolution()
-    model = load_model()
+    model = load_model_d()
     search_directions = ['forward', 'left', 'backward', 'right']
     search_index = 0
 
@@ -38,9 +39,7 @@ def main():
                     time_taken = end_time - start_time
                     print(f"Time taken to find Pink Cube: {time_taken:.2f} seconds")
                 else:
-                    # If the pink cube is not in the frame, turn the camera and move to find it
                     if not move_to_find_cube(ue4_window, model, desktop_resolution, compressed_resolution):
-                        # Move the player if the cube is still not found
                         navigate_camera(search_directions[search_index], duration=0.5)
                         search_index = (search_index + 1) % len(search_directions)
         time.sleep(0.01)

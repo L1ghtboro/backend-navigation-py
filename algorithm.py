@@ -9,6 +9,7 @@ from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
 from sklearn.cluster import KMeans
+from tensorflow.keras.models import load_model as keras_load_model
 
 pyautogui.FAILSAFE = False
 
@@ -48,9 +49,13 @@ def dominant_color(image, k=3):
     dominant_color_rgb = dominant_color[::-1]  # Reverse the order of components (BGR to RGB)
     return dominant_color_rgb.astype(int)
 
-def load_model():
+def load_model_d():
     model = MobileNetV2(weights='imagenet', include_top=False, input_shape=(64, 64, 3))
     model = tf.keras.models.Model(inputs=model.input, outputs=model.layers[-1].output)
+    return model
+
+def load_model_from_file(model_path):
+    model = keras_load_model(model_path)
     return model
 
 def find_navigation_cube_position(screenshot):
